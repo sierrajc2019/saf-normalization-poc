@@ -3,7 +3,7 @@ name: SAF Normalization Pipeline
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # lets you trigger it manually from GitHub UI
+  workflow_dispatch:
 
 jobs:
   normalize:
@@ -16,69 +16,93 @@ jobs:
       - name: Install SAF CLI
         run: npm install -g @mitre/saf
 
-      - name: Verify SAF version
-        run: saf --version
+      - name: Verify SAF version and available converters
+        run: |
+          saf --version
+          saf convert --help
 
-      # ── CKL conversion ─────────────────────────────────────
+      - name: Create output directories
+        run: |
+          mkdir -p hdf_output
+          mkdir -p hdf_output/nessus
+          mkdir -p hdf_output/prowler
+
+      # ── CKL conversion ──────────────────────────────────────
       - name: Convert CKL to HDF
         run: |
+          count=0
           for f in sample_data/ckl/*.ckl; do
-            [ -f "$f" ] || continue
+            [ -f "$f" ] || { echo "No CKL files found"; continue; }
             base=$(basename "$f" .ckl)
-            echo "Converting $f"
-            saf convert ckl2hdf -i "$f" -o "hdf_output/${base}_ckl.json"
+            echo "Converting: $f"
+            saf convert ckl2hdf -i "$f" -o "hdf_output/${base}_ckl.json" && echo "Success: hdf_output/${base}_ckl.json" || echo "Failed: $f"
+            count=$((count + 1))
           done
+          echo "Total CKL files processed: $count"
 
       # ── Nessus conversion ───────────────────────────────────
       - name: Convert Nessus to HDF
         run: |
-          mkdir -p hdf_output/nessus_tmp
+          count=0
           for f in sample_data/nessus/*.nessus; do
-            [ -f "$f" ] || continue
+            [ -f "$f" ] || { echo "No Nessus files found"; continue; }
             base=$(basename "$f" .nessus)
-            echo "Converting $f"
-            saf convert nessus2hdf -i "$f" -o "hdf_output/nessus_tmp"
-            # rename outputs to include source label
-            for out in hdf_output/nessus_tmp/*.json; do
-              [ -f "$out" ] || continue
-              mv "$out" "hdf_output/${base}_nessus.json"
-            done
+            echo "Converting: $f"
+            saf convert nessus2hdf -i "$f" -o "hdf_output/nessus" && echo "Success" || echo "Failed: $f"
+            echo "Files in nessus output dir:"
+            ls -la hdf_output/nessus/ || echo "  (empty)"
+            count=$((count + 1))
           done
+          echo "Total Nessus files processed: $count"
 
       # ── SCAP/XCCDF conversion ───────────────────────────────
       - name: Convert SCAP/XCCDF to HDF
         run: |
+          count=0
           for f in sample_data/scap/*.xml; do
-            [ -f "$f" ] || continue
+            [ -f "$f" ] || { echo "No SCAP files found — skipping"; continue; }
             base=$(basename "$f" .xml)
-            echo "Converting $f"
-            saf convert xccdf_results2hdf -i "$f" -o "hdf_output/${base}_scap.json"
+            echo "Converting: $f"
+            saf convert xccdf_results2hdf -i "$f" -o "hdf_output/${base}_scap.json" && echo "Success" || echo "Failed: $f"
+            count=$((count + 1))
           done
+          echo "Total SCAP files processed: $count"
 
       # ── Prowler conversion ──────────────────────────────────
       - name: Convert Prowler to HDF
         run: |
+          count=0
           for f in sample_data/prowler/*.json; do
-            [ -f "$f" ] || continue
+            [ -f "$f" ] || { echo "No Prowler files found — skipping"; continue; }
             base=$(basename "$f" .json)
-            echo "Converting $f"
-            mkdir -p "hdf_output/prowler_tmp"
-            saf convert prowler2hdf -i "$f" -o "hdf_output/prowler_tmp"
-            for out in hdf_output/prowler_tmp/*.json; do
-              [ -f "$out" ] || continue
-              mv "$out" "hdf_output/${base}_prowler.json"
-            done
+            echo "Converting: $f"
+            saf convert prowler2hdf -i "$f" -o "hdf_output/prowler" && echo "Success" || echo "Failed: $f"
+            count=$((count + 1))
           done
+          echo "Total Prowler files processed: $count"
 
       # ── Secure Score conversion ─────────────────────────────
       - name: Convert Microsoft Secure Score to HDF
         run: |
+          count=0
           for f in sample_data/secure_score/*.json; do
-            [ -f "$f" ] || continue
+            [ -f "$f" ] || { echo "No Secure Score files found — skipping"; continue; }
             base=$(basename "$f" .json)
-            echo "Converting $f"
-            saf convert msft_secure2hdf -i "$f" -o "hdf_output/${base}_secure_score.json"
+            echo "Converting: $f"
+            saf convert msft_secure2hdf -i "$f" -o "hdf_output/${base}_secure_score.json" && echo "Success" || echo "Failed: $f"
+            count=$((count + 1))
           done
+          echo "Total Secure Score files processed: $count"
+
+      # ── List everything produced ────────────────────────────
+      - name: List all HDF outputs
+        run: |
+          echo "=============================="
+          echo " ALL FILES IN hdf_output/"
+          echo "=============================="
+          find hdf_output/ -name "*.json" | sort
+          echo ""
+          echo "Total JSON files: $(find hdf_output/ -name '*.json' | wc -l)"
 
       # ── Summary of all HDF outputs ──────────────────────────
       - name: View summaries
@@ -86,14 +110,13 @@ jobs:
           echo "=============================="
           echo " HDF CONVERSION SUMMARY"
           echo "=============================="
-          for f in hdf_output/*.json; do
-            [ -f "$f" ] || continue
+          find hdf_output/ -name "*.json" | sort | while read f; do
             echo ""
             echo ">>> $f"
-            saf view summary -i "$f" || echo "  (summary unavailable for this file)"
+            saf view summary -i "$f" || echo "  (summary unavailable)"
           done
 
-      # ── Upload HDF files as artifacts ───────────────────────
+      # ── Upload artifacts ────────────────────────────────────
       - name: Upload HDF artifacts
         uses: actions/upload-artifact@v4
         with:
