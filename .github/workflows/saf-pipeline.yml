@@ -1,4 +1,4 @@
-name: SAF Normalization Pipeline
+﻿name: SAF Normalization Pipeline
 
 on:
   push:
@@ -13,103 +13,72 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install SAF CLI
-        run: npm install -g @mitre/saf
-
-      - name: Verify SAF version and available converters
+      - name: Install SAF CLI from GitHub releases
         run: |
+          curl -sL https://github.com/mitre/saf/releases/latest/download/saf-linux-x64.tar.gz -o saf.tar.gz
+          tar -xzf saf.tar.gz
+          sudo mv saf /usr/local/bin/saf
           saf --version
-          saf convert --help
 
       - name: Create output directories
         run: |
           mkdir -p hdf_output
-          mkdir -p hdf_output/nessus
           mkdir -p hdf_output/prowler
 
-      # ── CKL conversion ──────────────────────────────────────
       - name: Convert CKL to HDF
         run: |
-          count=0
           for f in sample_data/ckl/*.ckl; do
             [ -f "$f" ] || { echo "No CKL files found"; continue; }
             base=$(basename "$f" .ckl)
             echo "Converting: $f"
-            saf convert ckl2hdf -i "$f" -o "hdf_output/${base}_ckl.json" && echo "Success: hdf_output/${base}_ckl.json" || echo "Failed: $f"
-            count=$((count + 1))
+            saf convert ckl2hdf -i "$f" -o "hdf_output/${base}_ckl.json" && echo "Success" || echo "Failed: $f"
           done
-          echo "Total CKL files processed: $count"
 
-      # ── Nessus conversion ───────────────────────────────────
       - name: Convert Nessus to HDF
         run: |
-          npm install -g @mitre/hdf-converters 2>/dev/null || true
           for f in sample_data/nessus/*.nessus; do
             [ -f "$f" ] || { echo "No Nessus files found"; continue; }
             base=$(basename "$f" .nessus)
             echo "Converting: $f"
-            node -e "
-              const fs = require('fs');
-              const xml = fs.readFileSync('$f', 'utf8');
-              const {NessusResults} = require('@mitre/hdf-converters');
-              const converter = new NessusResults(xml);
-              const hdf = converter.toHdf();
-              fs.writeFileSync('hdf_output/${base}_nessus.json', JSON.stringify(hdf, null, 2));
-              console.log('Converted successfully');
-            " && echo "Success" || echo "Failed: $f"
+            saf convert nessus2hdf -i "$f" -o "hdf_output/${base}_nessus.json" && echo "Success" || echo "Failed: $f"
             ls -la "hdf_output/${base}_nessus.json" 2>/dev/null || echo "  (not created)"
           done
 
-      # ── SCAP/XCCDF conversion ───────────────────────────────
       - name: Convert SCAP/XCCDF to HDF
         run: |
-          count=0
           for f in sample_data/scap/*.xml; do
             [ -f "$f" ] || { echo "No SCAP files found — skipping"; continue; }
             base=$(basename "$f" .xml)
             echo "Converting: $f"
             saf convert xccdf_results2hdf -i "$f" -o "hdf_output/${base}_scap.json" && echo "Success" || echo "Failed: $f"
-            count=$((count + 1))
           done
-          echo "Total SCAP files processed: $count"
 
-      # ── Prowler conversion ──────────────────────────────────
       - name: Convert Prowler to HDF
         run: |
-          count=0
           for f in sample_data/prowler/*.json; do
             [ -f "$f" ] || { echo "No Prowler files found — skipping"; continue; }
             base=$(basename "$f" .json)
             echo "Converting: $f"
             saf convert prowler2hdf -i "$f" -o "hdf_output/prowler" && echo "Success" || echo "Failed: $f"
-            count=$((count + 1))
           done
-          echo "Total Prowler files processed: $count"
 
-      # ── Secure Score conversion ─────────────────────────────
       - name: Convert Microsoft Secure Score to HDF
         run: |
-          count=0
           for f in sample_data/secure_score/*.json; do
             [ -f "$f" ] || { echo "No Secure Score files found — skipping"; continue; }
             base=$(basename "$f" .json)
             echo "Converting: $f"
             saf convert msft_secure2hdf -i "$f" -o "hdf_output/${base}_secure_score.json" && echo "Success" || echo "Failed: $f"
-            count=$((count + 1))
           done
-          echo "Total Secure Score files processed: $count"
 
-      # ── List everything produced ────────────────────────────
       - name: List all HDF outputs
         run: |
           echo "=============================="
           echo " ALL FILES IN hdf_output/"
           echo "=============================="
           find hdf_output/ -name "*.json" | sort
-          echo ""
           echo "Total JSON files: $(find hdf_output/ -name '*.json' | wc -l)"
 
-      # ── Summary of all HDF outputs ──────────────────────────
       - name: View summaries
         run: |
           echo "=============================="
@@ -121,7 +90,6 @@ jobs:
             saf view summary -i "$f" || echo "  (summary unavailable)"
           done
 
-      # ── Upload artifacts ────────────────────────────────────
       - name: Upload HDF artifacts
         uses: actions/upload-artifact@v4
         with:
