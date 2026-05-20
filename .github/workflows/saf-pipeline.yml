@@ -41,7 +41,7 @@ jobs:
           echo "Total CKL files processed: $count"
 
       # ── Nessus conversion ───────────────────────────────────
- - name: Convert Nessus to HDF
+      - name: Convert Nessus to HDF
         run: |
           for f in sample_data/nessus/*.nessus; do
             [ -f "$f" ] || { echo "No Nessus files found"; continue; }
