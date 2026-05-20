@@ -43,17 +43,17 @@ jobs:
       # ── Nessus conversion ───────────────────────────────────
       - name: Convert Nessus to HDF
         run: |
-          count=0
           for f in sample_data/nessus/*.nessus; do
             [ -f "$f" ] || { echo "No Nessus files found"; continue; }
             base=$(basename "$f" .nessus)
             echo "Converting: $f"
-            saf convert nessus2hdf -i "$f" -o "hdf_output/nessus" && echo "Success" || echo "Failed: $f"
-            echo "Files in nessus output dir:"
+            echo "--- File size: $(wc -c < $f) bytes"
+            echo "--- First 5 lines:"
+            head -5 "$f"
+            saf convert nessus2hdf -i "$f" -o "hdf_output/nessus" -L debug 2>&1
+            echo "--- Output dir contents:"
             ls -la hdf_output/nessus/ || echo "  (empty)"
-            count=$((count + 1))
           done
-          echo "Total Nessus files processed: $count"
 
       # ── SCAP/XCCDF conversion ───────────────────────────────
       - name: Convert SCAP/XCCDF to HDF
