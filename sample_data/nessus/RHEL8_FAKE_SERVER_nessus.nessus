@@ -1,237 +1,139 @@
 <?xml version="1.0" ?>
 <NessusClientData_v2>
-  <Policy>
-    <policyName>Advanced Scan</policyName>
-    <Preferences>
-      <ServerPreferences>
-        <preference>
-          <name>plugin_set</name>
-          <value>all</value>
-        </preference>
-      </ServerPreferences>
-    </Preferences>
-    <FamilySelection>
-      <FamilyItem>
-        <FamilyName>General</FamilyName>
-        <Status>enabled</Status>
-      </FamilyItem>
-    </FamilySelection>
-    <IndividualPluginSelection>
-      <PluginItem>
-        <PluginId>0</PluginId>
-        <PluginName>All</PluginName>
-        <Family>General</Family>
-        <Status>enabled</Status>
-      </PluginItem>
-    </IndividualPluginSelection>
-  </Policy>
   <Report name="RHEL8_FAKE_SERVER" xmlns:cm="http://www.nessus.org/cm">
-    <ReportHost name="10.10.20.45">
+    <ReportHost name="rhel8-appserver-01.example.mil">
       <HostProperties>
-        <tag name="HOST_START_TIMESTAMP">1705312800</tag>
-        <tag name="HOST_END_TIMESTAMP">1705314134</tag>
+        <tag name="host-ip">10.10.20.45</tag>
+        <tag name="host-fqdn">rhel8-appserver-01.example.mil</tag>
+        <tag name="operating-system">Linux Kernel 4.18.0 on Red Hat Enterprise Linux 8.8</tag>
         <tag name="HOST_START">Mon Jan 15 08:00:00 2024</tag>
         <tag name="HOST_END">Mon Jan 15 08:22:14 2024</tag>
-        <tag name="host-fqdn">rhel8-appserver-01.example.mil</tag>
-        <tag name="host-ip">10.10.20.45</tag>
-        <tag name="operating-system">Linux Kernel 4.18.0-477.10.1.el8_8.x86_64 on Red Hat Enterprise Linux 8.8 (Ootpa)</tag>
-        <tag name="os">Linux</tag>
-        <tag name="system-type">general-purpose</tag>
-        <tag name="mac-address">00:50:56:AB:CD:EF</tag>
       </HostProperties>
-
       <ReportItem port="0" svc_name="general" protocol="tcp" severity="0" pluginID="19506" pluginName="Nessus Scan Information" pluginFamily="Settings">
-        <description>This plugin displays information about the Nessus scan.</description>
-        <fname>scan_info.nasl</fname>
-        <plugin_output>Information about this scan :
-
-Nessus version            : 10.6.2
-Plugin feed version       : 202401150915
-Scanner edition used      : Nessus
-Scan type                 : Normal
-Scan name                 : RHEL8 Vuln Scan
-Scan policy used          : Advanced Scan
-Credentialed checks       : yes
-Scan Start Date           : 2024/1/15 08:00 EST
-Scan duration             : 1334 sec</plugin_output>
+        <description>Nessus scan information.</description>
         <risk_factor>None</risk_factor>
-        <solution>N/A</solution>
         <synopsis>Information about the Nessus scan.</synopsis>
+        <solution>N/A</solution>
+        <plugin_output>Nessus version : 10.6.2
+Credentialed checks : yes
+Scan Start Date : 2024/1/15 08:00
+Scan duration : 1334 sec</plugin_output>
       </ReportItem>
-
       <ReportItem port="443" svc_name="https" protocol="tcp" severity="4" pluginID="170234" pluginName="OpenSSL Multiple Vulnerabilities" pluginFamily="Web Servers">
-        <agent>all</agent>
+        <description>The version of OpenSSL installed on the remote host is affected by multiple vulnerabilities including a remote code execution flaw.</description>
+        <risk_factor>Critical</risk_factor>
+        <synopsis>The remote service is affected by multiple vulnerabilities.</synopsis>
+        <solution>Upgrade to OpenSSL version 1.0.2zg or later.</solution>
         <cvss3_base_score>9.8</cvss3_base_score>
-        <cvss3_temporal_score>8.8</cvss3_temporal_score>
         <cvss3_vector>CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H</cvss3_vector>
         <cvss_base_score>10.0</cvss_base_score>
-        <cvss_temporal_score>7.8</cvss_temporal_score>
         <cvss_vector>AV:N/AC:L/Au:N/C:C/I:C/A:C</cvss_vector>
-        <description>The version of OpenSSL installed on the remote host is prior to a patched release. It is therefore affected by multiple vulnerabilities including a remote code execution flaw in the X.509 certificate verification process.</description>
-        <fname>openssl_vuln.nasl</fname>
-        <plugin_output>Version source    : openssl
-Installed version : 1.0.2k-fips
-Fixed version     : 1.0.2zg
-Path              : /usr/bin/openssl</plugin_output>
-        <risk_factor>Critical</risk_factor>
-        <see_also>https://www.openssl.org/news/secadv/20230207.txt</see_also>
-        <solution>Upgrade to OpenSSL version 1.0.2zg or later.</solution>
-        <synopsis>The remote service is affected by multiple vulnerabilities.</synopsis>
+        <plugin_output>Installed version : 1.0.2k-fips
+Fixed version : 1.0.2zg</plugin_output>
         <vuln_publication_date>2023/02/07</vuln_publication_date>
-        <patch_publication_date>2023/02/07</patch_publication_date>
-        <plugin_publication_date>2023/02/08</plugin_publication_date>
         <cve>CVE-2023-0286</cve>
         <cve>CVE-2023-0215</cve>
-        <xref>IAVA:2023-A-0035</xref>
       </ReportItem>
-
       <ReportItem port="8080" svc_name="www" protocol="tcp" severity="4" pluginID="156032" pluginName="Apache Log4j Remote Code Execution" pluginFamily="CGI abuses">
-        <agent>all</agent>
+        <description>The version of Apache Log4j on the remote host is affected by a remote code execution vulnerability via the JNDI lookup feature.</description>
+        <risk_factor>Critical</risk_factor>
+        <synopsis>The remote host is affected by a remote code execution vulnerability.</synopsis>
+        <solution>Upgrade to Apache Log4j version 2.17.1 or later.</solution>
         <cvss3_base_score>10.0</cvss3_base_score>
         <cvss3_vector>CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H</cvss3_vector>
         <cvss_base_score>9.3</cvss_base_score>
         <cvss_vector>AV:N/AC:M/Au:N/C:C/I:C/A:C</cvss_vector>
-        <description>The version of Apache Log4j on the remote host is 2.x prior to 2.17.1. It is therefore affected by a remote code execution vulnerability via the JNDI lookup feature when attacker-controlled strings are processed by the logging framework.</description>
-        <fname>log4shell.nasl</fname>
-        <plugin_output>Version source    : MANIFEST.MF
-Installed version : 2.14.1
-Fixed version     : 2.17.1
-Path              : /opt/app/lib/log4j-core-2.14.1.jar</plugin_output>
-        <risk_factor>Critical</risk_factor>
-        <see_also>https://logging.apache.org/log4j/2.x/security.html</see_also>
-        <solution>Upgrade to Apache Log4j version 2.17.1 or later.</solution>
-        <synopsis>The remote host is affected by a remote code execution vulnerability.</synopsis>
+        <plugin_output>Installed version : 2.14.1
+Fixed version : 2.17.1
+Path : /opt/app/lib/log4j-core-2.14.1.jar</plugin_output>
         <vuln_publication_date>2021/12/10</vuln_publication_date>
-        <patch_publication_date>2021/12/18</patch_publication_date>
-        <plugin_publication_date>2021/12/13</plugin_publication_date>
         <cve>CVE-2021-44228</cve>
         <cve>CVE-2021-45046</cve>
-        <xref>IAVA:2021-A-0573</xref>
       </ReportItem>
-
       <ReportItem port="22" svc_name="ssh" protocol="tcp" severity="3" pluginID="153953" pluginName="SSH Server CBC Mode Ciphers Enabled" pluginFamily="Misc.">
-        <agent>all</agent>
+        <description>The SSH server is configured to support Cipher Block Chaining (CBC) encryption. This may allow an attacker to recover the plaintext message from the ciphertext.</description>
+        <risk_factor>High</risk_factor>
+        <synopsis>The SSH server is configured to use Cipher Block Chaining encryption.</synopsis>
+        <solution>Disable CBC mode cipher encryption and enable CTR or GCM cipher mode encryption.</solution>
         <cvss3_base_score>7.5</cvss3_base_score>
         <cvss3_vector>CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N</cvss3_vector>
         <cvss_base_score>6.4</cvss_base_score>
         <cvss_vector>AV:N/AC:L/Au:N/C:P/I:P/A:N</cvss_vector>
-        <description>The SSH server is configured to support Cipher Block Chaining (CBC) encryption. This may allow an attacker to recover the plaintext message from the ciphertext.</description>
-        <fname>ssh_cbc_supported_ciphers.nasl</fname>
         <plugin_output>The following CBC algorithms are supported :
   aes128-cbc
   aes256-cbc
   3des-cbc</plugin_output>
-        <risk_factor>High</risk_factor>
-        <solution>Disable CBC mode cipher encryption and enable CTR or GCM cipher mode encryption.</solution>
-        <synopsis>The SSH server is configured to use Cipher Block Chaining encryption.</synopsis>
-        <vuln_publication_date>2008/11/01</vuln_publication_date>
       </ReportItem>
-
       <ReportItem port="0" svc_name="general" protocol="tcp" severity="3" pluginID="174786" pluginName="RHEL 8 Kernel Local Privilege Escalation" pluginFamily="Red Hat Local Security Checks">
-        <agent>all</agent>
+        <description>The remote RHEL 8 host has packages installed that are affected by a local privilege escalation flaw in the Linux kernel nf_tables component.</description>
+        <risk_factor>High</risk_factor>
+        <synopsis>The remote RHEL 8 host is missing one or more security updates.</synopsis>
+        <solution>Update the RHEL kernel package based on the guidance in RHSA-2023:2148.</solution>
         <cvss3_base_score>7.8</cvss3_base_score>
         <cvss3_vector>CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</cvss3_vector>
         <cvss_base_score>7.2</cvss_base_score>
         <cvss_vector>AV:L/AC:L/Au:N/C:C/I:C/A:C</cvss_vector>
-        <description>The remote RHEL 8 host has packages installed that are affected by multiple vulnerabilities. A local privilege escalation flaw was found in the Linux kernel nf_tables component.</description>
-        <fname>redhat-RHSA-2023-2148.nasl</fname>
         <plugin_output>Installed package : kernel-4.18.0-425.13.1.el8_7
-Fixed package     : kernel-4.18.0-477.10.1.el8_8</plugin_output>
-        <risk_factor>High</risk_factor>
-        <solution>Update the RHEL kernel package based on the guidance in RHSA-2023:2148.</solution>
-        <synopsis>The remote RHEL 8 host is missing one or more security updates.</synopsis>
-        <vuln_publication_date>2023/01/13</vuln_publication_date>
-        <patch_publication_date>2023/05/09</patch_publication_date>
+Fixed package : kernel-4.18.0-477.10.1.el8_8</plugin_output>
         <cve>CVE-2023-0266</cve>
-        <xref>RHSA:2023-2148</xref>
       </ReportItem>
-
       <ReportItem port="443" svc_name="https" protocol="tcp" severity="2" pluginID="171943" pluginName="Apache HTTP Server Multiple Vulnerabilities" pluginFamily="Web Servers">
-        <agent>all</agent>
+        <description>The version of Apache HTTP Server installed on the remote host is prior to 2.4.56 and is affected by HTTP request smuggling vulnerabilities.</description>
+        <risk_factor>Medium</risk_factor>
+        <synopsis>The remote web server is affected by multiple vulnerabilities.</synopsis>
+        <solution>Upgrade to Apache HTTP Server version 2.4.56 or later.</solution>
         <cvss3_base_score>5.3</cvss3_base_score>
         <cvss3_vector>CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N</cvss3_vector>
         <cvss_base_score>5.0</cvss_base_score>
         <cvss_vector>AV:N/AC:L/Au:N/C:N/I:P/A:N</cvss_vector>
-        <description>The version of Apache HTTP Server installed on the remote host is prior to 2.4.56. It is therefore affected by HTTP request splitting and request smuggling vulnerabilities.</description>
-        <fname>apache_2_4_56.nasl</fname>
-        <plugin_output>URL               : https://10.10.20.45/
-Installed version : 2.4.51
-Fixed version     : 2.4.56</plugin_output>
-        <risk_factor>Medium</risk_factor>
-        <solution>Upgrade to Apache HTTP Server version 2.4.56 or later.</solution>
-        <synopsis>The remote web server is affected by multiple vulnerabilities.</synopsis>
-        <vuln_publication_date>2023/03/07</vuln_publication_date>
-        <patch_publication_date>2023/03/07</patch_publication_date>
+        <plugin_output>Installed version : 2.4.51
+Fixed version : 2.4.56</plugin_output>
         <cve>CVE-2023-25690</cve>
       </ReportItem>
-
       <ReportItem port="443" svc_name="https" protocol="tcp" severity="2" pluginID="157288" pluginName="TLS Version 1.0 Protocol Detection" pluginFamily="Service detection">
-        <agent>all</agent>
+        <description>The remote service accepts connections encrypted using TLS 1.0 which has known cryptographic design flaws.</description>
+        <risk_factor>Medium</risk_factor>
+        <synopsis>The remote service encrypts communications using an older version of TLS.</synopsis>
+        <solution>Enable support for TLS 1.2 and 1.3 and disable support for TLS 1.0.</solution>
         <cvss3_base_score>6.5</cvss3_base_score>
         <cvss3_vector>CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:N</cvss3_vector>
         <cvss_base_score>5.1</cvss_base_score>
         <cvss_vector>AV:N/AC:H/Au:N/C:C/I:P/A:N</cvss_vector>
-        <description>The remote service accepts connections encrypted using TLS 1.0. TLS 1.0 has a number of cryptographic design flaws and should be disabled.</description>
-        <fname>tls10_detection.nasl</fname>
         <plugin_output>TLSv1 is enabled and the server supports at least one cipher.
 Cipher : TLS_RSA_WITH_AES_128_CBC_SHA</plugin_output>
-        <risk_factor>Medium</risk_factor>
-        <solution>Enable support for TLS 1.2 and 1.3, and disable support for TLS 1.0.</solution>
-        <synopsis>The remote service encrypts communications using an older version of TLS.</synopsis>
       </ReportItem>
-
       <ReportItem port="0" svc_name="general" protocol="tcp" severity="2" pluginID="176021" pluginName="RHEL 8 sudo Privilege Escalation" pluginFamily="Red Hat Local Security Checks">
-        <agent>all</agent>
+        <description>The remote RHEL 8 host has a vulnerable version of sudo installed allowing a local attacker with sudoedit privileges to escalate their privileges.</description>
+        <risk_factor>Medium</risk_factor>
+        <synopsis>The remote RHEL 8 host is missing a security update.</synopsis>
+        <solution>Update the RHEL sudo package based on the guidance in RHSA-2023:2592.</solution>
         <cvss3_base_score>6.7</cvss3_base_score>
         <cvss3_vector>CVSS:3.0/AV:L/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H</cvss3_vector>
         <cvss_base_score>6.5</cvss_base_score>
         <cvss_vector>AV:L/AC:L/Au:N/C:C/I:C/A:N</cvss_vector>
-        <description>The remote RHEL 8 host has a vulnerable version of sudo installed. When using sudoedit, a local attacker with sudoedit privileges may escalate their privileges by editing a file not authorized to be edited.</description>
-        <fname>redhat-RHSA-2023-2592.nasl</fname>
         <plugin_output>Installed package : sudo-1.8.29-8.el8
-Fixed package     : sudo-1.8.29-9.el8_7.2</plugin_output>
-        <risk_factor>Medium</risk_factor>
-        <solution>Update the RHEL sudo package based on the guidance in RHSA-2023:2592.</solution>
-        <synopsis>The remote RHEL 8 host is missing a security update.</synopsis>
-        <vuln_publication_date>2023/01/18</vuln_publication_date>
-        <patch_publication_date>2023/05/16</patch_publication_date>
+Fixed package : sudo-1.8.29-9.el8_7.2</plugin_output>
         <cve>CVE-2023-22809</cve>
-        <xref>RHSA:2023-2592</xref>
       </ReportItem>
-
       <ReportItem port="0" svc_name="general" protocol="icmp" severity="1" pluginID="10114" pluginName="ICMP Timestamp Request Remote Date Disclosure" pluginFamily="General">
+        <description>The remote host answers to an ICMP timestamp request allowing an attacker to know the date set on the targeted machine.</description>
+        <risk_factor>Low</risk_factor>
+        <synopsis>It is possible to determine the exact time set on the remote host.</synopsis>
+        <solution>Filter out the ICMP timestamp requests and outgoing ICMP timestamp replies.</solution>
         <cvss_base_score>2.6</cvss_base_score>
         <cvss_vector>AV:N/AC:H/Au:N/C:P/I:N/A:N</cvss_vector>
-        <description>The remote host answers to an ICMP timestamp request. This allows an attacker to know the date set on the targeted machine, which may assist in defeating time-based authentication protocols.</description>
-        <fname>icmp_timestamp.nasl</fname>
-        <plugin_output>This host returns non-standard timestamps (high bit is set).</plugin_output>
-        <risk_factor>Low</risk_factor>
-        <solution>Filter out the ICMP timestamp requests (13) and outgoing ICMP timestamp replies (14).</solution>
-        <synopsis>It is possible to determine the exact time set on the remote host.</synopsis>
+        <plugin_output>This host returns non-standard timestamps.</plugin_output>
       </ReportItem>
-
-      <ReportItem port="443" svc_name="https" protocol="tcp" severity="1" pluginID="11213" pluginName="HTTP TRACE / TRACK Methods Allowed" pluginFamily="Web Servers">
+      <ReportItem port="443" svc_name="https" protocol="tcp" severity="1" pluginID="11213" pluginName="HTTP TRACE Methods Allowed" pluginFamily="Web Servers">
+        <description>The remote webserver supports the TRACE HTTP method which may allow cross-site scripting attacks.</description>
+        <risk_factor>Low</risk_factor>
+        <synopsis>Debugging functions are enabled on the remote web server.</synopsis>
+        <solution>Disable the TRACE HTTP method on the web server.</solution>
         <cvss_base_score>3.5</cvss_base_score>
         <cvss_vector>AV:N/AC:M/Au:N/C:P/I:N/A:N</cvss_vector>
-        <description>The remote webserver supports the TRACE and/or TRACK HTTP methods. These methods are typically used to echo the contents of an HTTP request back to the requester for debugging purposes.</description>
-        <fname>http_methods.nasl</fname>
-        <plugin_output>Nessus sent a TRACE request and received a 200 OK response confirming the method is enabled.</plugin_output>
-        <risk_factor>Low</risk_factor>
-        <solution>Disable the TRACE and TRACK HTTP methods on the web server.</solution>
-        <synopsis>Debugging functions are enabled on the remote web server.</synopsis>
+        <plugin_output>Nessus sent a TRACE request and received a 200 OK response.</plugin_output>
         <cve>CVE-2004-2320</cve>
       </ReportItem>
-
-      <ReportItem port="22" svc_name="ssh" protocol="tcp" severity="0" pluginID="10267" pluginName="SSH Server Type and Version Information" pluginFamily="General">
-        <description>It is possible to obtain information about the remote SSH server by sending an empty authentication request.</description>
-        <fname>ssh_detect.nasl</fname>
-        <plugin_output>SSH version : SSH-2.0-OpenSSH_8.0
-SSH supported authentication : publickey,gssapi-keyex,gssapi-with-mic,password</plugin_output>
-        <risk_factor>None</risk_factor>
-        <solution>N/A</solution>
-        <synopsis>An SSH server is listening on this port.</synopsis>
-      </ReportItem>
-
     </ReportHost>
   </Report>
 </NessusClientData_v2>
