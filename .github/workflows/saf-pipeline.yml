@@ -1,0 +1,102 @@
+name: SAF Normalization Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # lets you trigger it manually from GitHub UI
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install SAF CLI
+        run: npm install -g @mitre/saf
+
+      - name: Verify SAF version
+        run: saf --version
+
+      # ── CKL conversion ─────────────────────────────────────
+      - name: Convert CKL to HDF
+        run: |
+          for f in sample_data/ckl/*.ckl; do
+            [ -f "$f" ] || continue
+            base=$(basename "$f" .ckl)
+            echo "Converting $f"
+            saf convert ckl2hdf -i "$f" -o "hdf_output/${base}_ckl.json"
+          done
+
+      # ── Nessus conversion ───────────────────────────────────
+      - name: Convert Nessus to HDF
+        run: |
+          mkdir -p hdf_output/nessus_tmp
+          for f in sample_data/nessus/*.nessus; do
+            [ -f "$f" ] || continue
+            base=$(basename "$f" .nessus)
+            echo "Converting $f"
+            saf convert nessus2hdf -i "$f" -o "hdf_output/nessus_tmp"
+            # rename outputs to include source label
+            for out in hdf_output/nessus_tmp/*.json; do
+              [ -f "$out" ] || continue
+              mv "$out" "hdf_output/${base}_nessus.json"
+            done
+          done
+
+      # ── SCAP/XCCDF conversion ───────────────────────────────
+      - name: Convert SCAP/XCCDF to HDF
+        run: |
+          for f in sample_data/scap/*.xml; do
+            [ -f "$f" ] || continue
+            base=$(basename "$f" .xml)
+            echo "Converting $f"
+            saf convert xccdf_results2hdf -i "$f" -o "hdf_output/${base}_scap.json"
+          done
+
+      # ── Prowler conversion ──────────────────────────────────
+      - name: Convert Prowler to HDF
+        run: |
+          for f in sample_data/prowler/*.json; do
+            [ -f "$f" ] || continue
+            base=$(basename "$f" .json)
+            echo "Converting $f"
+            mkdir -p "hdf_output/prowler_tmp"
+            saf convert prowler2hdf -i "$f" -o "hdf_output/prowler_tmp"
+            for out in hdf_output/prowler_tmp/*.json; do
+              [ -f "$out" ] || continue
+              mv "$out" "hdf_output/${base}_prowler.json"
+            done
+          done
+
+      # ── Secure Score conversion ─────────────────────────────
+      - name: Convert Microsoft Secure Score to HDF
+        run: |
+          for f in sample_data/secure_score/*.json; do
+            [ -f "$f" ] || continue
+            base=$(basename "$f" .json)
+            echo "Converting $f"
+            saf convert msft_secure2hdf -i "$f" -o "hdf_output/${base}_secure_score.json"
+          done
+
+      # ── Summary of all HDF outputs ──────────────────────────
+      - name: View summaries
+        run: |
+          echo "=============================="
+          echo " HDF CONVERSION SUMMARY"
+          echo "=============================="
+          for f in hdf_output/*.json; do
+            [ -f "$f" ] || continue
+            echo ""
+            echo ">>> $f"
+            saf view summary -i "$f" || echo "  (summary unavailable for this file)"
+          done
+
+      # ── Upload HDF files as artifacts ───────────────────────
+      - name: Upload HDF artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: hdf-results
+          path: hdf_output/
+          retention-days: 30
