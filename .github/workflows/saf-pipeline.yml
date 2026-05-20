@@ -41,18 +41,15 @@ jobs:
           echo "Total CKL files processed: $count"
 
       # ── Nessus conversion ───────────────────────────────────
-      - name: Convert Nessus to HDF
+ - name: Convert Nessus to HDF
         run: |
           for f in sample_data/nessus/*.nessus; do
             [ -f "$f" ] || { echo "No Nessus files found"; continue; }
             base=$(basename "$f" .nessus)
             echo "Converting: $f"
-            echo "--- File size: $(wc -c < $f) bytes"
-            echo "--- First 5 lines:"
-            head -5 "$f"
-            saf convert nessus2hdf -i "$f" -o "hdf_output/nessus" -L debug 2>&1
-            echo "--- Output dir contents:"
-            ls -la hdf_output/nessus/ || echo "  (empty)"
+            saf convert nessus2hdf -i "$f" -o "hdf_output/${base}_nessus.json" && echo "Success" || echo "Failed: $f"
+            echo "Output file:"
+            ls -la "hdf_output/${base}_nessus.json" 2>/dev/null || echo "  (not created)"
           done
 
       # ── SCAP/XCCDF conversion ───────────────────────────────
