@@ -1,4 +1,4 @@
-﻿name: SAF Normalization Pipeline
+name: SAF Normalization Pipeline
 
 on:
   push:
@@ -17,3 +17,55 @@ jobs:
         run: |
           npm install -g @mitre/saf@1.4.13
           saf --version
+
+      - name: Create output directories
+        run: mkdir -p hdf_output hdf_output/prowler
+
+      - name: Convert CKL to HDF
+        run: |
+          for f in sample_data/ckl/*.ckl; do
+            [ -f "$f" ] || { echo "No CKL files found"; continue; }
+            base=$(basename "$f" .ckl)
+            echo "Converting: $f"
+            saf convert ckl2hdf -i "$f" -o "hdf_output/${base}_ckl.json" && echo "Success" || echo "Failed"
+          done
+
+      - name: Convert Prowler to HDF
+        run: |
+          for f in sample_data/prowler/*.json; do
+            [ -f "$f" ] || { echo "No Prowler files found"; continue; }
+            base=$(basename "$f" .json)
+            echo "Converting: $f"
+            saf convert prowler2hdf -i "$f" -o "hdf_output/prowler" && echo "Success" || echo "Failed"
+          done
+
+      - name: Convert Microsoft Secure Score to HDF
+        run: |
+          for f in sample_data/secure_score/*.json; do
+            [ -f "$f" ] || { echo "No Secure Score files found"; continue; }
+            base=$(basename "$f" .json)
+            echo "Converting: $f"
+            saf convert msft_secure2hdf -i "$f" -o "hdf_output/${base}_secure_score.json" && echo "Success" || echo "Failed"
+          done
+
+      - name: List all HDF outputs
+        run: |
+          echo "=== ALL FILES IN hdf_output/ ==="
+          find hdf_output/ -name "*.json" | sort
+          echo "Total: $(find hdf_output/ -name '*.json' | wc -l) files"
+
+      - name: View summaries
+        run: |
+          echo "=== HDF CONVERSION SUMMARY ==="
+          find hdf_output/ -name "*.json" | sort | while read f; do
+            echo ""
+            echo ">>> $f"
+            saf view summary -i "$f" || echo "  (summary unavailable)"
+          done
+
+      - name: Upload HDF artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: hdf-results
+          path: hdf_output/
+          retention-days: 30

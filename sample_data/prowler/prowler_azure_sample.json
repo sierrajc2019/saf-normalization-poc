@@ -1,0 +1,578 @@
+[
+  {
+    "AssessmentStartTime": "2024-01-15T08:00:00Z",
+    "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_servers_is_on-subscriptionid-123456-eastus",
+    "Provider": "azure",
+    "CheckID": "defender_ensure_defender_for_servers_is_on",
+    "CheckTitle": "Ensure that Microsoft Defender for Servers is set to 'On'",
+    "CheckType": ["Software and Configuration Checks"],
+    "ServiceName": "defender",
+    "SubServiceName": "",
+    "Status": "FAIL",
+    "StatusExtended": "Microsoft Defender for Servers is not enabled for subscription fake-subscription-id-001.",
+    "Severity": "high",
+    "ResourceType": "Subscription",
+    "ResourceDetails": "",
+    "Description": "Turning on Microsoft Defender for Servers enables threat detection for Servers, providing threat intelligence, anomaly detection, and behavior analytics in Azure Security Center.",
+    "Risk": "Turning off Microsoft Defender for Servers reduces the ability to detect threats and vulnerabilities on Azure servers.",
+    "RelatedUrl": "https://docs.microsoft.com/en-us/azure/security-center/security-center-detection-capabilities",
+    "Remediation": {
+      "Code": {
+        "CLI": "az security pricing create --name 'VirtualMachines' --tier 'Standard'",
+        "NativeIaC": "",
+        "Other": "",
+        "Terraform": ""
+      },
+      "Recommendation": {
+        "Text": "Enable Microsoft Defender for Servers in Azure Security Center.",
+        "Url": "https://docs.microsoft.com/en-us/azure/security-center/security-center-detection-capabilities"
+      }
+    },
+    "Compliance": [
+      {
+        "Framework": "NIST-SP-800-53-Revision-5",
+        "Version": "",
+        "Requirements": [
+          {
+            "Id": "SI-3",
+            "Name": "Malicious Code Protection",
+            "Attributes": [
+              {
+                "Section": "SI-3",
+                "SubSection": "",
+                "Profile": "Level 2",
+                "AssessmentStatus": "Automated",
+                "Description": "Implement malicious code protection mechanisms",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          },
+          {
+            "Id": "RA-5",
+            "Name": "Vulnerability Monitoring and Scanning",
+            "Attributes": [
+              {
+                "Section": "RA-5",
+                "SubSection": "",
+                "Profile": "Level 2",
+                "AssessmentStatus": "Automated",
+                "Description": "Monitor and scan for vulnerabilities in the information system",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Categories": ["infrastructure-security"],
+    "DependsOn": [],
+    "RelatedTo": [],
+    "Notes": "",
+    "AccountId": "fake-subscription-id-001",
+    "OrganizationsInfo": null,
+    "Region": "eastus",
+    "ResourceId": "/subscriptions/fake-subscription-id-001",
+    "ResourceName": "fake-subscription-id-001",
+    "ResourceTags": {}
+  },
+  {
+    "AssessmentStartTime": "2024-01-15T08:00:00Z",
+    "FindingUniqueId": "prowler-azure-iam_subscription_roles_owner_custom-subscriptionid-123456-eastus",
+    "Provider": "azure",
+    "CheckID": "iam_subscription_roles_owner_custom",
+    "CheckTitle": "Ensure that no custom subscription owner roles are created",
+    "CheckType": ["Software and Configuration Checks"],
+    "ServiceName": "iam",
+    "SubServiceName": "",
+    "Status": "PASS",
+    "StatusExtended": "No custom owner roles found in subscription fake-subscription-id-001.",
+    "Severity": "high",
+    "ResourceType": "Subscription",
+    "ResourceDetails": "",
+    "Description": "Subscription ownership should not include permission to create custom owner roles. The principle of least privilege should be followed and only necessary privileges should be assigned instead of allowing full administrative access.",
+    "Risk": "Custom owner roles can grant excessive privileges to users that may be difficult to audit and control.",
+    "RelatedUrl": "https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles",
+    "Remediation": {
+      "Code": {
+        "CLI": "az role definition delete --name <custom_role_name>",
+        "NativeIaC": "",
+        "Other": "",
+        "Terraform": ""
+      },
+      "Recommendation": {
+        "Text": "Remove any custom owner roles from the subscription.",
+        "Url": "https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles"
+      }
+    },
+    "Compliance": [
+      {
+        "Framework": "NIST-SP-800-53-Revision-5",
+        "Version": "",
+        "Requirements": [
+          {
+            "Id": "AC-6",
+            "Name": "Least Privilege",
+            "Attributes": [
+              {
+                "Section": "AC-6",
+                "SubSection": "",
+                "Profile": "Level 1",
+                "AssessmentStatus": "Automated",
+                "Description": "Employ the principle of least privilege",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Categories": ["trustboundaries"],
+    "DependsOn": [],
+    "RelatedTo": [],
+    "Notes": "",
+    "AccountId": "fake-subscription-id-001",
+    "OrganizationsInfo": null,
+    "Region": "eastus",
+    "ResourceId": "/subscriptions/fake-subscription-id-001",
+    "ResourceName": "fake-subscription-id-001",
+    "ResourceTags": {}
+  },
+  {
+    "AssessmentStartTime": "2024-01-15T08:00:00Z",
+    "FindingUniqueId": "prowler-azure-storage_blob_public_access_level_disabled-storageaccount-fakestore001-eastus",
+    "Provider": "azure",
+    "CheckID": "storage_blob_public_access_level_disabled",
+    "CheckTitle": "Ensure that 'Public access level' is disabled for storage accounts with blob containers",
+    "CheckType": ["Software and Configuration Checks"],
+    "ServiceName": "storage",
+    "SubServiceName": "",
+    "Status": "FAIL",
+    "StatusExtended": "Storage account fakestore001 has public blob access enabled.",
+    "Severity": "high",
+    "ResourceType": "Microsoft.Storage/storageAccounts",
+    "ResourceDetails": "",
+    "Description": "Disallowing public access for a storage account overrides the public access settings for individual containers in that storage account.",
+    "Risk": "Public access to storage accounts allows anonymous access to sensitive data which may lead to data exfiltration.",
+    "RelatedUrl": "https://docs.microsoft.com/en-us/azure/storage/blobs/anonymous-read-access-prevent",
+    "Remediation": {
+      "Code": {
+        "CLI": "az storage account update --name <storage_account_name> --resource-group <resource_group_name> --allow-blob-public-access false",
+        "NativeIaC": "",
+        "Other": "",
+        "Terraform": ""
+      },
+      "Recommendation": {
+        "Text": "Disable public access on all storage accounts.",
+        "Url": "https://docs.microsoft.com/en-us/azure/storage/blobs/anonymous-read-access-prevent"
+      }
+    },
+    "Compliance": [
+      {
+        "Framework": "NIST-SP-800-53-Revision-5",
+        "Version": "",
+        "Requirements": [
+          {
+            "Id": "AC-3",
+            "Name": "Access Enforcement",
+            "Attributes": [
+              {
+                "Section": "AC-3",
+                "SubSection": "",
+                "Profile": "Level 1",
+                "AssessmentStatus": "Automated",
+                "Description": "Enforce approved authorizations for logical access",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          },
+          {
+            "Id": "SC-28",
+            "Name": "Protection of Information at Rest",
+            "Attributes": [
+              {
+                "Section": "SC-28",
+                "SubSection": "",
+                "Profile": "Level 1",
+                "AssessmentStatus": "Automated",
+                "Description": "Protect the confidentiality and integrity of information at rest",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Categories": ["encryption"],
+    "DependsOn": [],
+    "RelatedTo": [],
+    "Notes": "",
+    "AccountId": "fake-subscription-id-001",
+    "OrganizationsInfo": null,
+    "Region": "eastus",
+    "ResourceId": "/subscriptions/fake-subscription-id-001/resourceGroups/fake-rg/providers/Microsoft.Storage/storageAccounts/fakestore001",
+    "ResourceName": "fakestore001",
+    "ResourceTags": {}
+  },
+  {
+    "AssessmentStartTime": "2024-01-15T08:00:00Z",
+    "FindingUniqueId": "prowler-azure-keyvault_soft_delete_enabled-keyvault-fakevault001-eastus",
+    "Provider": "azure",
+    "CheckID": "keyvault_soft_delete_enabled",
+    "CheckTitle": "Ensure that Azure Key Vault has soft delete enabled",
+    "CheckType": ["Software and Configuration Checks"],
+    "ServiceName": "keyvault",
+    "SubServiceName": "",
+    "Status": "PASS",
+    "StatusExtended": "Key Vault fakevault001 has soft delete enabled.",
+    "Severity": "medium",
+    "ResourceType": "Microsoft.KeyVault/vaults",
+    "ResourceDetails": "",
+    "Description": "The Key Vault contains object keys, secrets and certificates. Accidental unavailability of a Key Vault can cause immediate data loss or loss of security functions supported by the key vault objects.",
+    "Risk": "Without soft delete, accidental deletion of key vault objects leads to permanent data loss.",
+    "RelatedUrl": "https://docs.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview",
+    "Remediation": {
+      "Code": {
+        "CLI": "az keyvault update --name <key_vault_name> --resource-group <resource_group_name> --enable-soft-delete true",
+        "NativeIaC": "",
+        "Other": "",
+        "Terraform": ""
+      },
+      "Recommendation": {
+        "Text": "Enable soft delete on all Key Vaults.",
+        "Url": "https://docs.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview"
+      }
+    },
+    "Compliance": [
+      {
+        "Framework": "NIST-SP-800-53-Revision-5",
+        "Version": "",
+        "Requirements": [
+          {
+            "Id": "CP-9",
+            "Name": "Information System Backup",
+            "Attributes": [
+              {
+                "Section": "CP-9",
+                "SubSection": "",
+                "Profile": "Level 1",
+                "AssessmentStatus": "Automated",
+                "Description": "Conduct backups of user-level and system-level information",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Categories": ["encryption"],
+    "DependsOn": [],
+    "RelatedTo": [],
+    "Notes": "",
+    "AccountId": "fake-subscription-id-001",
+    "OrganizationsInfo": null,
+    "Region": "eastus",
+    "ResourceId": "/subscriptions/fake-subscription-id-001/resourceGroups/fake-rg/providers/Microsoft.KeyVault/vaults/fakevault001",
+    "ResourceName": "fakevault001",
+    "ResourceTags": {}
+  },
+  {
+    "AssessmentStartTime": "2024-01-15T08:00:00Z",
+    "FindingUniqueId": "prowler-azure-logging_diagnostic_settings_exists-subscriptionid-123456-eastus",
+    "Provider": "azure",
+    "CheckID": "logging_diagnostic_settings_exists",
+    "CheckTitle": "Ensure that Azure Diagnostic Settings are configured to capture all activities",
+    "CheckType": ["Software and Configuration Checks"],
+    "ServiceName": "monitor",
+    "SubServiceName": "",
+    "Status": "FAIL",
+    "StatusExtended": "Diagnostic settings not configured for all required log categories in subscription fake-subscription-id-001.",
+    "Severity": "medium",
+    "ResourceType": "Subscription",
+    "ResourceDetails": "",
+    "Description": "A diagnostic setting controls how a diagnostic log is exported. Each resource requires its own diagnostic setting. Diagnostic settings should be enabled for all services which support it.",
+    "Risk": "Without diagnostic settings, security events may not be logged and security incidents may go undetected.",
+    "RelatedUrl": "https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/diagnostic-settings",
+    "Remediation": {
+      "Code": {
+        "CLI": "az monitor diagnostic-settings create --name <setting_name> --resource <resource_id> --logs '[{category:Administrative,enabled:true},{category:Security,enabled:true}]'",
+        "NativeIaC": "",
+        "Other": "",
+        "Terraform": ""
+      },
+      "Recommendation": {
+        "Text": "Configure diagnostic settings to capture Administrative, Security, ServiceHealth, Alert, Recommendation, Policy, Autoscale, and ResourceHealth log categories.",
+        "Url": "https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/diagnostic-settings"
+      }
+    },
+    "Compliance": [
+      {
+        "Framework": "NIST-SP-800-53-Revision-5",
+        "Version": "",
+        "Requirements": [
+          {
+            "Id": "AU-2",
+            "Name": "Event Logging",
+            "Attributes": [
+              {
+                "Section": "AU-2",
+                "SubSection": "",
+                "Profile": "Level 1",
+                "AssessmentStatus": "Automated",
+                "Description": "Identify the types of events that the system is capable of logging",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          },
+          {
+            "Id": "AU-12",
+            "Name": "Audit Record Generation",
+            "Attributes": [
+              {
+                "Section": "AU-12",
+                "SubSection": "",
+                "Profile": "Level 1",
+                "AssessmentStatus": "Automated",
+                "Description": "Provide audit record generation capability for the event types",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Categories": ["logging"],
+    "DependsOn": [],
+    "RelatedTo": [],
+    "Notes": "",
+    "AccountId": "fake-subscription-id-001",
+    "OrganizationsInfo": null,
+    "Region": "eastus",
+    "ResourceId": "/subscriptions/fake-subscription-id-001",
+    "ResourceName": "fake-subscription-id-001",
+    "ResourceTags": {}
+  },
+  {
+    "AssessmentStartTime": "2024-01-15T08:00:00Z",
+    "FindingUniqueId": "prowler-azure-network_rdp_access_restricted-nsg-fakensg001-eastus",
+    "Provider": "azure",
+    "CheckID": "network_rdp_access_restricted",
+    "CheckTitle": "Ensure that RDP access from the Internet is evaluated and restricted",
+    "CheckType": ["Software and Configuration Checks"],
+    "ServiceName": "network",
+    "SubServiceName": "",
+    "Status": "FAIL",
+    "StatusExtended": "NSG fakensg001 allows unrestricted RDP access from the internet on port 3389.",
+    "Severity": "high",
+    "ResourceType": "Microsoft.Network/networkSecurityGroups",
+    "ResourceDetails": "",
+    "Description": "The potential security problem with using RDP over the Internet is that attackers can use brute force techniques to gain access to Azure Virtual Machines.",
+    "Risk": "Unrestricted RDP access from the internet exposes virtual machines to brute force attacks.",
+    "RelatedUrl": "https://docs.microsoft.com/en-us/azure/security/fundamentals/network-best-practices",
+    "Remediation": {
+      "Code": {
+        "CLI": "az network nsg rule update --name <rule_name> --nsg-name <nsg_name> --resource-group <rg_name> --access Deny",
+        "NativeIaC": "",
+        "Other": "",
+        "Terraform": ""
+      },
+      "Recommendation": {
+        "Text": "Disable RDP access from the internet. Use Azure Bastion or VPN for remote access.",
+        "Url": "https://docs.microsoft.com/en-us/azure/security/fundamentals/network-best-practices"
+      }
+    },
+    "Compliance": [
+      {
+        "Framework": "NIST-SP-800-53-Revision-5",
+        "Version": "",
+        "Requirements": [
+          {
+            "Id": "AC-17",
+            "Name": "Remote Access",
+            "Attributes": [
+              {
+                "Section": "AC-17",
+                "SubSection": "",
+                "Profile": "Level 1",
+                "AssessmentStatus": "Automated",
+                "Description": "Establish and document usage restrictions for remote access",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          },
+          {
+            "Id": "SC-7",
+            "Name": "Boundary Protection",
+            "Attributes": [
+              {
+                "Section": "SC-7",
+                "SubSection": "",
+                "Profile": "Level 1",
+                "AssessmentStatus": "Automated",
+                "Description": "Monitor and control communications at external boundaries",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Categories": ["infrastructure-security"],
+    "DependsOn": [],
+    "RelatedTo": [],
+    "Notes": "",
+    "AccountId": "fake-subscription-id-001",
+    "OrganizationsInfo": null,
+    "Region": "eastus",
+    "ResourceId": "/subscriptions/fake-subscription-id-001/resourceGroups/fake-rg/providers/Microsoft.Network/networkSecurityGroups/fakensg001",
+    "ResourceName": "fakensg001",
+    "ResourceTags": {}
+  },
+  {
+    "AssessmentStartTime": "2024-01-15T08:00:00Z",
+    "FindingUniqueId": "prowler-azure-entra_policy_guest_users_access_restrictions-tenant-eastus",
+    "Provider": "azure",
+    "CheckID": "entra_policy_guest_users_access_restrictions",
+    "CheckTitle": "Ensure that guest users are reviewed on a monthly basis",
+    "CheckType": ["Software and Configuration Checks"],
+    "ServiceName": "entra",
+    "SubServiceName": "",
+    "Status": "FAIL",
+    "StatusExtended": "Guest user access restrictions are not properly configured in Entra ID tenant.",
+    "Severity": "medium",
+    "ResourceType": "Microsoft.Entra/tenants",
+    "ResourceDetails": "",
+    "Description": "Guest accounts are accounts added outside your organization. It is important to review guest accounts monthly to ensure they still require access and are not stale accounts that increase your attack surface.",
+    "Risk": "Stale guest accounts increase the attack surface and may allow unauthorized access to organizational resources.",
+    "RelatedUrl": "https://docs.microsoft.com/en-us/azure/active-directory/governance/access-reviews-overview",
+    "Remediation": {
+      "Code": {
+        "CLI": "",
+        "NativeIaC": "",
+        "Other": "Review guest users in Azure AD portal under Users > Guest users",
+        "Terraform": ""
+      },
+      "Recommendation": {
+        "Text": "Review and remove unnecessary guest accounts. Implement Azure AD Access Reviews.",
+        "Url": "https://docs.microsoft.com/en-us/azure/active-directory/governance/access-reviews-overview"
+      }
+    },
+    "Compliance": [
+      {
+        "Framework": "NIST-SP-800-53-Revision-5",
+        "Version": "",
+        "Requirements": [
+          {
+            "Id": "AC-2",
+            "Name": "Account Management",
+            "Attributes": [
+              {
+                "Section": "AC-2",
+                "SubSection": "",
+                "Profile": "Level 1",
+                "AssessmentStatus": "Automated",
+                "Description": "Manage system accounts, group memberships, privileges, workflow, notifications, deactivations, and authorizations",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Categories": ["trustboundaries"],
+    "DependsOn": [],
+    "RelatedTo": [],
+    "Notes": "",
+    "AccountId": "fake-subscription-id-001",
+    "OrganizationsInfo": null,
+    "Region": "eastus",
+    "ResourceId": "/tenants/fake-tenant-id-001",
+    "ResourceName": "fake-tenant-id-001",
+    "ResourceTags": {}
+  },
+  {
+    "AssessmentStartTime": "2024-01-15T08:00:00Z",
+    "FindingUniqueId": "prowler-azure-vm_ensure_managed_disks_used-vm-fakevm001-eastus",
+    "Provider": "azure",
+    "CheckID": "vm_ensure_managed_disks_used",
+    "CheckTitle": "Ensure that Virtual Machines are using managed disks",
+    "CheckType": ["Software and Configuration Checks"],
+    "ServiceName": "vm",
+    "SubServiceName": "",
+    "Status": "PASS",
+    "StatusExtended": "Virtual machine fakevm001 is using managed disks.",
+    "Severity": "low",
+    "ResourceType": "Microsoft.Compute/virtualMachines",
+    "ResourceDetails": "",
+    "Description": "Migrate BLOB based VHDs to Managed Disks on Virtual Machines to exploit the default features of this configuration. Managed disks are by default encrypted on the underlying hardware.",
+    "Risk": "Unmanaged disks may not benefit from default encryption and centralized management.",
+    "RelatedUrl": "https://docs.microsoft.com/en-us/azure/virtual-machines/managed-disks-overview",
+    "Remediation": {
+      "Code": {
+        "CLI": "az vm convert --name <vm_name> --resource-group <rg_name>",
+        "NativeIaC": "",
+        "Other": "",
+        "Terraform": ""
+      },
+      "Recommendation": {
+        "Text": "Convert all VMs to use managed disks.",
+        "Url": "https://docs.microsoft.com/en-us/azure/virtual-machines/managed-disks-overview"
+      }
+    },
+    "Compliance": [
+      {
+        "Framework": "NIST-SP-800-53-Revision-5",
+        "Version": "",
+        "Requirements": [
+          {
+            "Id": "SC-28",
+            "Name": "Protection of Information at Rest",
+            "Attributes": [
+              {
+                "Section": "SC-28",
+                "SubSection": "",
+                "Profile": "Level 1",
+                "AssessmentStatus": "Automated",
+                "Description": "Protect the confidentiality and integrity of information at rest",
+                "RationaleStatement": "",
+                "AdditionalInformation": "",
+                "References": ""
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Categories": ["encryption"],
+    "DependsOn": [],
+    "RelatedTo": [],
+    "Notes": "",
+    "AccountId": "fake-subscription-id-001",
+    "OrganizationsInfo": null,
+    "Region": "eastus",
+    "ResourceId": "/subscriptions/fake-subscription-id-001/resourceGroups/fake-rg/providers/Microsoft.Compute/virtualMachines/fakevm001",
+    "ResourceName": "fakevm001",
+    "ResourceTags": {}
+  }
+]

@@ -1,0 +1,357 @@
+{
+  "secureScore": {
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#Security/secureScores/$entity",
+    "id": "fake-tenant-id-001_2024-01-15",
+    "azureTenantId": "fake-tenant-id-001",
+    "activeUserCount": 145,
+    "createdDateTime": "2024-01-15T00:00:00Z",
+    "currentScore": 47.35,
+    "enabledServices": [
+      "HasAADP2",
+      "HasMDO",
+      "HasMDE",
+      "HasMDI",
+      "HasMDA",
+      "HasInformationProtection"
+    ],
+    "licensedUserCount": 150,
+    "maxScore": 100.0,
+    "averageComparativeScores": [
+      {
+        "basis": "AllTenants",
+        "averageScore": 52.4
+      },
+      {
+        "basis": "TotalSeats",
+        "averageScore": 49.1
+      },
+      {
+        "basis": "IndustryTypes",
+        "averageScore": 51.2
+      }
+    ],
+    "controlScores": [
+      {
+        "controlCategory": "Identity",
+        "controlName": "MFARegistrationV2",
+        "description": "Require MFA for all users",
+        "score": 0.0,
+        "scoreInPercentage": 0.0,
+        "total": 10.0
+      },
+      {
+        "controlCategory": "Identity",
+        "controlName": "AdminMFAV2",
+        "description": "Require MFA for administrative roles",
+        "score": 7.0,
+        "scoreInPercentage": 70.0,
+        "total": 10.0
+      },
+      {
+        "controlCategory": "Identity",
+        "controlName": "BlockLegacyAuthentication",
+        "description": "Block legacy authentication",
+        "score": 0.0,
+        "scoreInPercentage": 0.0,
+        "total": 8.0
+      },
+      {
+        "controlCategory": "Identity",
+        "controlName": "SelfServicePasswordReset",
+        "description": "Enable self-service password reset",
+        "score": 1.0,
+        "scoreInPercentage": 100.0,
+        "total": 1.0
+      },
+      {
+        "controlCategory": "Identity",
+        "controlName": "PrivilegedIdentityManagement",
+        "description": "Enable Privileged Identity Management",
+        "score": 0.0,
+        "scoreInPercentage": 0.0,
+        "total": 7.0
+      },
+      {
+        "controlCategory": "Identity",
+        "controlName": "SigninRiskPolicy",
+        "description": "Enable sign-in risk policy",
+        "score": 0.0,
+        "scoreInPercentage": 0.0,
+        "total": 7.0
+      },
+      {
+        "controlCategory": "Data",
+        "controlName": "SensitivityLabelPolicy",
+        "description": "Apply sensitivity labels to documents",
+        "score": 0.0,
+        "scoreInPercentage": 0.0,
+        "total": 4.0
+      },
+      {
+        "controlCategory": "Data",
+        "controlName": "DLPEnabled",
+        "description": "Enable Data Loss Prevention policies",
+        "score": 2.0,
+        "scoreInPercentage": 50.0,
+        "total": 4.0
+      },
+      {
+        "controlCategory": "Device",
+        "controlName": "IntuneMDMCompliance",
+        "description": "Require compliant devices via Intune MDM",
+        "score": 0.0,
+        "scoreInPercentage": 0.0,
+        "total": 5.0
+      },
+      {
+        "controlCategory": "Device",
+        "controlName": "AntivirusEnabled",
+        "description": "Ensure Microsoft Defender Antivirus is enabled",
+        "score": 4.0,
+        "scoreInPercentage": 80.0,
+        "total": 5.0
+      },
+      {
+        "controlCategory": "Apps",
+        "controlName": "OAuthAppPolicies",
+        "description": "Manage OAuth app consent policies",
+        "score": 0.0,
+        "scoreInPercentage": 0.0,
+        "total": 3.0
+      },
+      {
+        "controlCategory": "Apps",
+        "controlName": "CloudAppSecurityEnabled",
+        "description": "Enable Microsoft Defender for Cloud Apps",
+        "score": 3.0,
+        "scoreInPercentage": 100.0,
+        "total": 3.0
+      },
+      {
+        "controlCategory": "Infrastructure",
+        "controlName": "DefenderForServers",
+        "description": "Enable Microsoft Defender for Servers",
+        "score": 0.0,
+        "scoreInPercentage": 0.0,
+        "total": 8.0
+      },
+      {
+        "controlCategory": "Infrastructure",
+        "controlName": "DefenderForStorage",
+        "description": "Enable Microsoft Defender for Storage",
+        "score": 0.0,
+        "scoreInPercentage": 0.0,
+        "total": 4.0
+      },
+      {
+        "controlCategory": "Infrastructure",
+        "controlName": "SecureScoreBaseline",
+        "description": "Meet secure score baseline recommendations",
+        "score": 5.35,
+        "scoreInPercentage": 53.5,
+        "total": 10.0
+      }
+    ]
+  },
+  "secureScoreControlProfiles": {
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#Security/secureScoreControlProfiles",
+    "value": [
+      {
+        "id": "MFARegistrationV2",
+        "azureTenantId": "fake-tenant-id-001",
+        "actionType": "Config",
+        "actionUrl": "https://portal.azure.com/#blade/Microsoft_AAD_IAM/SecurityMenuBlade/MfaContext",
+        "controlCategory": "Identity",
+        "title": "Require MFA for all users",
+        "deprecated": false,
+        "implementationCost": "Low",
+        "lastModifiedDateTime": "2024-01-01T00:00:00Z",
+        "maxScore": 10.0,
+        "rank": 1,
+        "remediation": "Enable multi-factor authentication for all users in Azure Active Directory using Conditional Access policies.",
+        "remediationImpact": "Users will be required to complete MFA when signing in.",
+        "service": "AAD",
+        "threats": ["AccountBreach", "CredentialTheft"],
+        "tier": "Advanced",
+        "userImpact": "High",
+        "complianceInformation": [
+          {
+            "certificationName": "NIST SP 800-53",
+            "certificationControls": [
+              {
+                "name": "IA-2",
+                "url": "https://csrc.nist.gov/Projects/risk-management/sp800-53-controls/release-search#!/control?version=5.1&number=IA-2"
+              },
+              {
+                "name": "IA-5",
+                "url": "https://csrc.nist.gov/Projects/risk-management/sp800-53-controls/release-search#!/control?version=5.1&number=IA-5"
+              }
+            ]
+          }
+        ],
+        "controlStateUpdates": [
+          {
+            "assignedTo": "",
+            "comment": "MFA not yet enforced for all users",
+            "state": "Default",
+            "updatedBy": "admin@example.mil",
+            "updatedDateTime": "2024-01-15T08:00:00Z"
+          }
+        ],
+        "vendorInformation": {
+          "provider": "SecureScore",
+          "providerVersion": null,
+          "subProvider": null,
+          "vendor": "Microsoft"
+        }
+      },
+      {
+        "id": "AdminMFAV2",
+        "azureTenantId": "fake-tenant-id-001",
+        "actionType": "Config",
+        "actionUrl": "https://portal.azure.com/#blade/Microsoft_AAD_IAM/SecurityMenuBlade/MfaContext",
+        "controlCategory": "Identity",
+        "title": "Require MFA for administrative roles",
+        "deprecated": false,
+        "implementationCost": "Low",
+        "lastModifiedDateTime": "2024-01-01T00:00:00Z",
+        "maxScore": 10.0,
+        "rank": 2,
+        "remediation": "Require MFA for all users with administrative roles using Conditional Access policies.",
+        "remediationImpact": "Administrators will be required to complete MFA when signing in.",
+        "service": "AAD",
+        "threats": ["AccountBreach", "ElevationOfPrivilege"],
+        "tier": "Default",
+        "userImpact": "Low",
+        "complianceInformation": [
+          {
+            "certificationName": "NIST SP 800-53",
+            "certificationControls": [
+              {
+                "name": "IA-2",
+                "url": "https://csrc.nist.gov/Projects/risk-management/sp800-53-controls/release-search#!/control?version=5.1&number=IA-2"
+              },
+              {
+                "name": "AC-6",
+                "url": "https://csrc.nist.gov/Projects/risk-management/sp800-53-controls/release-search#!/control?version=5.1&number=AC-6"
+              }
+            ]
+          }
+        ],
+        "controlStateUpdates": [
+          {
+            "assignedTo": "secteam@example.mil",
+            "comment": "MFA enforced for 70% of admin accounts. Remaining accounts in remediation.",
+            "state": "InProgress",
+            "updatedBy": "admin@example.mil",
+            "updatedDateTime": "2024-01-15T08:00:00Z"
+          }
+        ],
+        "vendorInformation": {
+          "provider": "SecureScore",
+          "providerVersion": null,
+          "subProvider": null,
+          "vendor": "Microsoft"
+        }
+      },
+      {
+        "id": "BlockLegacyAuthentication",
+        "azureTenantId": "fake-tenant-id-001",
+        "actionType": "Config",
+        "actionUrl": "https://portal.azure.com/#blade/Microsoft_AAD_IAM/ConditionalAccessBlade/Policies",
+        "controlCategory": "Identity",
+        "title": "Block legacy authentication",
+        "deprecated": false,
+        "implementationCost": "Low",
+        "lastModifiedDateTime": "2024-01-01T00:00:00Z",
+        "maxScore": 8.0,
+        "rank": 3,
+        "remediation": "Create a Conditional Access policy to block legacy authentication protocols.",
+        "remediationImpact": "Legacy authentication clients will be blocked from signing in.",
+        "service": "AAD",
+        "threats": ["AccountBreach", "CredentialTheft"],
+        "tier": "Default",
+        "userImpact": "Medium",
+        "complianceInformation": [
+          {
+            "certificationName": "NIST SP 800-53",
+            "certificationControls": [
+              {
+                "name": "IA-3",
+                "url": "https://csrc.nist.gov/Projects/risk-management/sp800-53-controls/release-search#!/control?version=5.1&number=IA-3"
+              },
+              {
+                "name": "SC-8",
+                "url": "https://csrc.nist.gov/Projects/risk-management/sp800-53-controls/release-search#!/control?version=5.1&number=SC-8"
+              }
+            ]
+          }
+        ],
+        "controlStateUpdates": [
+          {
+            "assignedTo": "",
+            "comment": "Legacy auth still required by on-prem application. Remediation planned Q2.",
+            "state": "ThirdParty",
+            "updatedBy": "admin@example.mil",
+            "updatedDateTime": "2024-01-15T08:00:00Z"
+          }
+        ],
+        "vendorInformation": {
+          "provider": "SecureScore",
+          "providerVersion": null,
+          "subProvider": null,
+          "vendor": "Microsoft"
+        }
+      },
+      {
+        "id": "DefenderForServers",
+        "azureTenantId": "fake-tenant-id-001",
+        "actionType": "Config",
+        "actionUrl": "https://portal.azure.com/#blade/Microsoft_Azure_Security/SecurityMenuBlade/0",
+        "controlCategory": "Infrastructure",
+        "title": "Enable Microsoft Defender for Servers",
+        "deprecated": false,
+        "implementationCost": "High",
+        "lastModifiedDateTime": "2024-01-01T00:00:00Z",
+        "maxScore": 8.0,
+        "rank": 10,
+        "remediation": "Enable Microsoft Defender for Servers Plan 2 for all subscriptions.",
+        "remediationImpact": "Increased cost. Enhanced threat detection for all server workloads.",
+        "service": "AzureSecurityCenter",
+        "threats": ["Malware", "Ransomware", "LateralMovement"],
+        "tier": "Advanced",
+        "userImpact": "Low",
+        "complianceInformation": [
+          {
+            "certificationName": "NIST SP 800-53",
+            "certificationControls": [
+              {
+                "name": "SI-3",
+                "url": "https://csrc.nist.gov/Projects/risk-management/sp800-53-controls/release-search#!/control?version=5.1&number=SI-3"
+              },
+              {
+                "name": "RA-5",
+                "url": "https://csrc.nist.gov/Projects/risk-management/sp800-53-controls/release-search#!/control?version=5.1&number=RA-5"
+              }
+            ]
+          }
+        ],
+        "controlStateUpdates": [
+          {
+            "assignedTo": "cloudteam@example.mil",
+            "comment": "Budget approval pending for Defender for Servers Plan 2.",
+            "state": "Default",
+            "updatedBy": "admin@example.mil",
+            "updatedDateTime": "2024-01-15T08:00:00Z"
+          }
+        ],
+        "vendorInformation": {
+          "provider": "SecureScore",
+          "providerVersion": null,
+          "subProvider": null,
+          "vendor": "Microsoft"
+        }
+      }
+    ]
+  }
+}
