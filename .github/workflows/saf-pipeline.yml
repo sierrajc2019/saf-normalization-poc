@@ -43,12 +43,20 @@ jobs:
       # ── Nessus conversion ───────────────────────────────────
       - name: Convert Nessus to HDF
         run: |
+          npm install -g @mitre/hdf-converters 2>/dev/null || true
           for f in sample_data/nessus/*.nessus; do
             [ -f "$f" ] || { echo "No Nessus files found"; continue; }
             base=$(basename "$f" .nessus)
             echo "Converting: $f"
-            saf convert nessus2hdf -i "$f" -o "hdf_output/${base}_nessus.json" && echo "Success" || echo "Failed: $f"
-            echo "Output file:"
+            node -e "
+              const fs = require('fs');
+              const xml = fs.readFileSync('$f', 'utf8');
+              const {NessusResults} = require('@mitre/hdf-converters');
+              const converter = new NessusResults(xml);
+              const hdf = converter.toHdf();
+              fs.writeFileSync('hdf_output/${base}_nessus.json', JSON.stringify(hdf, null, 2));
+              console.log('Converted successfully');
+            " && echo "Success" || echo "Failed: $f"
             ls -la "hdf_output/${base}_nessus.json" 2>/dev/null || echo "  (not created)"
           done
 
